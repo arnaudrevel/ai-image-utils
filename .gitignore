@@ -205,3 +205,14 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Models and images
+aesthetic-classifier
+bestimages
+sorted
+a_ranger
+
+# Vrac
+*.png 
+*.json
+*.csv
