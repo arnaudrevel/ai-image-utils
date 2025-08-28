@@ -216,3 +216,5 @@ a_ranger
 *.png 
 *.json
 *.csv
+*.jpeg
+*.jpg
