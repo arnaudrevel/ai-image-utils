@@ -1,28 +1,30 @@
-# 🔗 Module d'Algorithmes de Regroupement et Doublons (`clustering/`)
+# 🔗 Grouping Algorithms & Duplicate Detection Module (`clustering/`)
 
-Ce module est dédié au regroupement visuel (clustering) automatique et à la détection de doublons ou de variantes sémantiques au sein de vos banques d'images. Il propose deux approches distinctes adaptées à vos besoins :
+> 🇫🇷 Une version française de ce document est disponible dans [README_FR.md](README_FR.md).
+
+This module is dedicated to automatic visual clustering and the detection of duplicates or semantic variants within image libraries. It offers two distinct approaches suited to different use cases:
 
 ---
 
-## 📁 Description des Outils
+## 📁 Tool Descriptions
 
-### 1. `cluster_by_duplicates.py` (Détection de Doublons et Variantes Physiques)
-* **Description** : Détecte les copies conformes ou quasi-conformes à l'aide de l'empreinte numérique **pHash** (Perceptual Hash) basée sur la transformée en cosinus discrète (DCT). Les images ayant une distance de Hamming (nombre de bits différents) inférieure au seuil choisi sont regroupées et rangées dans des dossiers `groupe_00X/`.
-* **Caractéristiques** :
-  * **Ultra-léger** : Aucun réseau de neurones lourd, s'exécute en quelques millisecondes sur CPU uniquement.
-  * **Cas d'usage** : Idéal pour nettoyer une base en trouvant les doublons stricts, les images redimensionnées, compressées en JPG, ou avec de légers filtres de couleur.
-* **Lancement** :
+### 1. `cluster_by_duplicates.py` (Duplicate & Near-Duplicate Detection)
+* **Description**: Detects exact or near-exact copies using the **pHash** (Perceptual Hash) fingerprint based on the Discrete Cosine Transform (DCT). Images with a Hamming distance (number of differing bits) below the chosen threshold are grouped together and placed in `groupe_00X/` folders.
+* **Features**:
+  * **Ultra-lightweight**: No heavy neural network involved — runs in milliseconds on CPU only.
+  * **Use case**: Ideal for cleaning a dataset by finding strict duplicates, resized images, JPG-recompressed variants, or images with minor color filters applied.
+* **Usage**:
   ```bash
-  uv run python clustering/cluster_by_duplicates.py "chemin/dossier_source" "chemin/dossier_destination" --threshold 5
+  uv run python clustering/cluster_by_duplicates.py "path/to/source_folder" "path/to/destination_folder" --threshold 5
   ```
 
-### 2. `cluster_by_semantics.py` (Regroupement Sémantique Profond)
-* **Description** : Approche d'apprentissage par transfert (Transfer Learning) non supervisée. Le script extrait des vecteurs de caractéristiques profondes à 2048 dimensions à l'aide du réseau de neurones de vision **ResNet50** (pré-entraîné sur ImageNet). Il applique ensuite l'algorithme de densité de Scikit-Learn **DBSCAN** avec similarité cosinus pour regrouper les images.
-* **Caractéristiques** :
-  * **Intelligent & Sémantique** : Regroupe des images partageant les mêmes concepts, compositions spatiales, ou sujets, même si les pixels et la résolution diffèrent totalement.
-  * **Nombre de groupes dynamique** : DBSCAN détermine lui-même le nombre optimal de clusters.
-  * **Isolation du bruit** : Les images jugées uniques/isolées ne sont pas forcées dans un groupe et sont rangées à part dans un dossier `noise/` (bruit).
-* **Lancement** :
+### 2. `cluster_by_semantics.py` (Deep Semantic Clustering)
+* **Description**: An unsupervised transfer learning approach. The script extracts 2048-dimensional deep feature vectors using the **ResNet50** vision network (pre-trained on ImageNet), then applies Scikit-Learn's density-based **DBSCAN** algorithm with cosine similarity to group images.
+* **Features**:
+  * **Intelligent & Semantic**: Groups images sharing the same concepts, spatial compositions, or subjects — even when pixels and resolution differ entirely.
+  * **Dynamic cluster count**: DBSCAN automatically determines the optimal number of clusters.
+  * **Noise isolation**: Images deemed unique or isolated are not forced into a group and are placed separately in a `noise/` folder.
+* **Usage**:
   ```bash
-  uv run python clustering/cluster_by_semantics.py "chemin/source" "chemin/destination" --eps 0.5 --min_samples 2
+  uv run python clustering/cluster_by_semantics.py "path/to/source" "path/to/destination" --eps 0.5 --min_samples 2
   ```

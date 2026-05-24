@@ -1,49 +1,51 @@
-# 🖼️ Module d'Interfaces Graphiques Gradio (`gui/`)
+# 🖼️ Gradio GUI Module (`gui/`)
 
-Ce module rassemble les interfaces graphiques web interactives locales créées avec la bibliothèque Gradio. Elles permettent d'annoter manuellement des images de manière ergonomique, d'établir des classements comparatifs par paires, ou d'explorer visuellement et statistiquement les prédictions générées par vos modèles.
+> 🇫🇷 Une version française de ce document est disponible dans [README_FR.md](README_FR.md).
+
+This module gathers the local interactive web interfaces built with the Gradio library. They allow for ergonomic manual image annotation, pairwise comparative ranking, or visual and statistical exploration of model predictions.
 
 ---
 
-## 📁 Description des Interfaces
+## 📁 Interface Descriptions
 
-### 1. `quality_annotator.py` (Annotateur Manuel Absolu)
-* **Description** : Interface web simplifiée permettant à l'utilisateur de passer en revue un lot d'images, de leur attribuer une note de 0 (Très mauvaise) à 5 (Excellente), et d'enregistrer ces annotations au format CSV.
-* **Caractéristiques** :
-  * Écriture concurrente sécurisée (utilisation d'un verrou thread-safe).
-  * Navigation réactive (boutons Précédent, Suivant/Ignorer).
-  * Reprise automatique : évite de proposer à nouveau les images déjà annotées lors d'une session précédente.
-* **Lancement** :
+### 1. `quality_annotator.py` (Absolute Manual Annotator)
+* **Description**: Simplified web interface allowing the user to review a batch of images, assign each a quality rating from 0 (Very Poor) to 5 (Excellent), and save annotations incrementally to a CSV file.
+* **Features**:
+  * Thread-safe concurrent writes (using a threading lock).
+  * Reactive navigation (Previous, Next/Skip buttons).
+  * Automatic resume: skips images already annotated in a previous session.
+* **Usage**:
   ```bash
-  uv run python gui/quality_annotator.py "chemin/vers/images" --recursive
+  uv run python gui/quality_annotator.py "path/to/images" --recursive
   ```
 
-### 2. `ab_vote.py` (Vote Comparatif A/B Unifié)
-* **Description** : Interface d'évaluation subjective basée sur les comparaisons par paires (pairwise comparisons). Les utilisateurs votent interactivement dans des duels aléatoires entre deux images, ce qui permet d'établir un classement esthétique global extrêmement précis en réduisant les biais subjectifs.
-* **Méthodes disponibles** :
-  * **Système Elo** (`--method elo`) : Les scores évoluent de manière non linéaire (facteur $K=32$) selon l'écart de force et la probabilité mathématique de gain. En fin de session, les scores bruts sont normalisés linéairement de $0.0$ à $5.0$.
-  * **Vote Condorcet** (`--method condorcet`) : Les scores évoluent de manière linéaire par pas constants ($+0.1$/$-0.1$), bornés de $0$ à $5$. Les images ayant atteint le score minimal ($0$) ou maximal ($5$) sont définitivement classées et exclues des prochains tirages pour focaliser l'attention sur les cas indécis.
-* **Caractéristiques** :
-  * Chargement automatique des images d'entrée depuis `data/inputs/pairwise_voting/` par défaut.
-  * Sauvegarde automatique et reprise de session via `annotation_state.json`.
-  * Export des résultats finals et historiques au format CSV dans `data/outputs/predictions/pairwise_rankings.csv`.
-* **Lancement** :
+### 2. `ab_vote.py` (Unified A/B Comparative Voting)
+* **Description**: Subjective evaluation interface based on pairwise comparisons. Users vote interactively in random duels between two images, enabling a highly accurate global aesthetic ranking by reducing subjective bias.
+* **Available methods**:
+  * **Elo system** (`--method elo`): Scores evolve non-linearly (factor $K=32$) based on strength gap and win probability. At the end of the session, raw scores are linearly normalized from $0.0$ to $5.0$.
+  * **Condorcet voting** (`--method condorcet`): Scores evolve linearly in fixed steps ($+0.1$/$-0.1$), bounded between $0$ and $5$. Images reaching the minimum ($0$) or maximum ($5$) score are permanently ranked and excluded from future draws to focus attention on undecided cases.
+* **Features**:
+  * Automatic loading of input images from `data/inputs/pairwise_voting/` by default.
+  * Automatic session save and resume via `annotation_state.json`.
+  * Export of final results and history to CSV at `data/outputs/predictions/pairwise_rankings.csv`.
+* **Usage**:
   ```bash
-  # Lancement par défaut en mode Elo
+  # Default Elo mode
   uv run python gui/ab_vote.py --method elo
-  
-  # Lancement en mode Condorcet
+
+  # Condorcet mode
   uv run python gui/ab_vote.py --method condorcet
   ```
 
-### 3. `results_dashboard.py` (Dashboard Unifié)
-* **Description** : Dashboard de visualisation permettant de charger un fichier CSV de résultats et d'explorer interactivement les scores esthétiques. Propose deux modes d'affichage basculables via un toggle intégré à l'interface :
-  * **Mode Standard** (défaut) : affiche toutes les colonnes du CSV avec formatage lisible (pourcentages, emojis succès/échec).
-  * **Mode Miniatures** : réduit l'affichage aux colonnes essentielles (`image_path`, `quality_label`) et injecte des aperçus d'images directement dans le tableau via des balises HTML `<img>`.
-* **Caractéristiques** :
-  * Bascule entre les deux modes sans rechargement du fichier CSV.
-  * Clic de ligne pour afficher l'image en haute résolution dans la visionneuse.
-  * Résumé statistique (total, succès, échecs, note moyenne).
-* **Lancement** :
+### 3. `results_dashboard.py` (Unified Dashboard)
+* **Description**: Visualization dashboard for loading a CSV results file and interactively exploring aesthetic scores. Offers two display modes switchable via an in-interface toggle:
+  * **Standard mode** (default): displays all CSV columns with readable formatting (percentages, success/failure emojis).
+  * **Thumbnail mode**: reduces display to essential columns (`image_path`, `quality_label`) and injects image previews directly into the table via HTML `<img>` tags.
+* **Features**:
+  * Switch between modes without reloading the CSV file.
+  * Click a row to display the image in full resolution in the viewer.
+  * Statistical summary (total, successes, failures, average score).
+* **Usage**:
   ```bash
   uv run python gui/results_dashboard.py
   ```

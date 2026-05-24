@@ -1,19 +1,20 @@
-# 🧪 Module de Tests d'Intégration et de Validation (`tests/`)
+# 🧪 Integration Tests & Validation Module (`tests/`)
 
-Ce module (anciennement `testaesthetic-predictor/`) contient les scripts de test rapide et d'intégration de base (smoke tests) servant à valider le comportement fonctionnel de vos dépendances logicielles d'évaluation.
+> 🇫🇷 Une version française de ce document est disponible dans [README_FR.md](README_FR.md).
+
+This module contains quick smoke tests and basic integration scripts used to validate the functional behavior of your evaluation software dependencies.
 
 ---
 
-## 📁 Description des Scripts
+## 📁 Script Descriptions
 
-### 1. `test_aesthetic_predictor.py` (Smoke Test d'Intégration)
-* **Description** : Script minimal conçu pour s'assurer que la bibliothèque de prédiction esthétique (`aesthetic_predictor`) est correctement installée sur votre machine et s'interface parfaitement avec Pillow pour charger une image de test JPEG.
-* **Fonctionnement** :
-  * Charge l'image de démonstration `bestImages/quality_5/00000-1671415246.jpg`.
-  * Invoque la fonction `predict_aesthetic` pour évaluer l'image.
-  * Affiche le score esthétique brut obtenu.
-* **Lancement** :
+### 1. `test_aesthetic_predictor.py` (Integration Smoke Test)
+* **Description**: Minimal script designed to ensure that the aesthetic prediction library (`aesthetic_predictor`) is correctly installed on your machine and interfaces properly with Pillow to load a JPEG test image.
+* **How it works**:
+  * Loads a demonstration image from `data/inputs/labeled_tiers/quality_5/`.
+  * Calls the `predict_aesthetic` function to evaluate the image.
+  * Prints the raw aesthetic score obtained.
+* **Usage**:
   ```bash
   uv run python tests/test_aesthetic_predictor.py
   ```
-

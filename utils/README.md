@@ -1,35 +1,36 @@
-# 🛠️ Module d'Utilitaires de Rangement (`utils/`)
+# 🛠️ File Sorting & Organization Utilities (`utils/`)
 
-Ce module contient les scripts utilitaires servant à gérer, trier et structurer physiquement vos fichiers d'images sur votre disque dur en s'appuyant sur des fichiers d'annotations ou de prédictions au format CSV.
+> 🇫🇷 Une version française de ce document est disponible dans [README_FR.md](README_FR.md).
+
+This module contains utility scripts for managing, sorting, and physically organizing image files on disk, based on annotation or prediction files in CSV format.
 
 ---
 
-## 📁 Description des Scripts
+## 📁 Script Descriptions
 
-### 1. `reorganize_images_csv.py` (Rangement CSV Générique)
-* **Description** : Permet de déplacer (ou de copier) des images éparpillées sur le disque vers des sous-dossiers spécifiques en fonction des colonnes `path` (chemin d'origine) et `dir` (nom du dossier de destination) d'un CSV de mapping.
-* **Caractéristiques** :
-  * **Résolution des conflits** : Si un fichier portant le même nom existe déjà dans le répertoire cible, le script lui attribue automatiquement un compteur incrémental unique (ex: `photo_1.jpg`) pour éviter d'écraser des données.
-  * **Option Copie** : L'option `--copy` patche dynamiquement la fonction de déplacement par une copie (`shutil.copy2`) préservant les métadonnées.
-* **Fonctionnement** :
+### 1. `reorganize_images_csv.py` (Generic CSV-driven Organization)
+* **Description**: Moves (or copies) images scattered across the disk into specific subfolders based on the `path` (source path) and `dir` (destination folder name) columns of a mapping CSV file.
+* **Features**:
+  * **Conflict resolution**: If a file with the same name already exists in the target directory, the script automatically appends an incremental counter (e.g., `photo_1.jpg`) to avoid overwriting data.
+  * **Copy option**: The `--copy` flag dynamically patches the move function with a copy (`shutil.copy2`) that preserves file metadata.
+* **Usage**:
   ```bash
-  python utils/reorganize_images_csv.py "chemin/vers/mapping.csv" "chemin/vers/dossier_cible" --copy
+  python utils/reorganize_images_csv.py "path/to/mapping.csv" "path/to/target_folder" --copy
   ```
 
-### 2. `sort_images_by_quality.py` (Tri par Note de Qualité)
-* **Description** : Script spécialisé qui lit un fichier CSV contenant des prédictions de qualité (avec colonnes `image_path` et `predicted_quality`) et classe automatiquement les images physiques dans 6 dossiers structurés distincts, de `0_VeryPoor` à `5_Excellent`.
-* **Caractéristiques** :
-  * Création automatique des répertoires de qualité cibles.
-  * Utilisation de `shutil.copy2` afin de préserver l'horodatage et les métadonnées originales des fichiers d'images.
-* **Fonctionnement** :
+### 2. `sort_images_by_quality.py` (Sort by Quality Score)
+* **Description**: Specialized script that reads a CSV file containing quality predictions (with `image_path` and `predicted_quality` columns) and automatically places physical images into 6 distinct structured folders, from `0_VeryPoor` to `5_Excellent`.
+* **Features**:
+  * Automatic creation of target quality directories.
+  * Uses `shutil.copy2` to preserve original file timestamps and metadata.
+* **Usage**:
   ```bash
-  python utils/sort_images_by_quality.py "chemin/vers/predictions.csv" "chemin/vers/repertoire_tri"
+  python utils/sort_images_by_quality.py "path/to/predictions.csv" "path/to/output_directory"
   ```
 
-### 3. `CopyTopNFiles.ps1` (Copie Sélectionnée d'Images - PowerShell)
-* **Description** : Script utilitaire PowerShell permettant d'extraire et de copier rapidement les $N$ premiers fichiers (triés par nom ou pertinence) d'un dossier source vers un dossier de destination, avec gestion automatique des créations de dossiers et écrasement éventuel facultatif.
-* **Fonctionnement** :
+### 3. `CopyTopNFiles.ps1` (Selective Image Copy — PowerShell)
+* **Description**: PowerShell utility script for quickly extracting and copying the top $N$ files (sorted by name or relevance) from a source folder to a destination folder, with automatic directory creation and optional overwrite handling.
+* **Usage**:
   ```powershell
-  .\utils\CopyTopNFiles.ps1 -SourcePath "chemin/vers/source" -DestinationPath "chemin/vers/destination" -NumberOfFiles 10 -Overwrite
+  .\utils\CopyTopNFiles.ps1 -SourcePath "path/to/source" -DestinationPath "path/to/destination" -NumberOfFiles 10 -Overwrite
   ```
-
