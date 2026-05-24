@@ -1,6 +1,13 @@
 # 🖼️ AI Image Quality Utilities (Outils d'Évaluation de Qualité Esthétique)
 
-Bienvenue dans la suite d'outils professionnels pour l'évaluation, l'annotation, l'entraînement et la gestion qualitative de banques d'images. Ce projet propose un ensemble de scripts allant du fine-tuning de Vision Transformers (ViT) à l'analyse esthétique assistée par grands modèles de vision locaux (VLM), en passant par des interfaces de duels A/B (Elo/Condorcet) et du clustering de doublons.
+Ce projet regroupe différents outils pour faciliter l'évaluation de la qualité esthétique d'images, organisés autour de six approches complémentaires :
+
+- 📦 **Outils sur étagère** : utilisation directe de modèles pré-entraînés reconnus (NIMA, MUSIQ via PyIQA, CLIP via `aesthetic-predictor`, Qwen2.5-VL via Ollama) sans entraînement supplémentaire.
+- 🎓 **Apprentissage personnalisé** : construction par fine-tuning (ViT, Random Forest) de prédicteurs adaptés à ses propres préférences esthétiques, à partir d'images annotées manuellement.
+- 🏷️ **Annotation manuelle directe** : interface Gradio pour noter chaque image individuellement (0 → 5), permettant de constituer les jeux de données nécessaires à l'entraînement personnalisé.
+- 🗳️ **Constitution de bases d'annotations par duels** : vote comparatif par paires d'images (Condorcet, Elo) pour réduire les biais subjectifs et produire des classements plus cohérents qu'une notation absolue.
+- 🔗 **Clusterisation a posteriori** : regroupement automatique d'images soit par proximité visuelle (pHash, détection de doublons), soit par proximité sémantique (ResNet50 + DBSCAN).
+- 🗂️ **Gestion de bibliothèque** : outils CLI pour trier et réorganiser physiquement les images dans des sous-dossiers structurés, à partir des résultats de prédiction ou d'un fichier de mapping CSV.
 
 ---
 
@@ -29,10 +36,9 @@ c:\Users\revel\OneDrive\Desktop\Python\Qualité image/
 │   └── example_vit_training.py         # Guide d'intégration et exemple d'entraînement complet
 │
 ├── gui/                          # 🖥️ 3. Tableaux de Bord & Annotations Manuelles
-│   ├── gui_quality_annotator.py        # Labellisation Gradio manuelle rapide (scores 0 à 5)
-│   ├── gui_ab_vote.py                  # [NOUVEAU] Vote comparatif A/B unifié (Elo & Condorcet)
-│   ├── gui_results_dashboard_basic.py  # Dashboard Gradio standard de visualisation de rapports
-│   └── gui_results_dashboard.py        # Dashboard Gradio évolué avec miniatures HTML dynamiques
+│   ├── quality_annotator.py            # Labellisation Gradio manuelle rapide (scores 0 à 5)
+│   ├── ab_vote.py                      # Vote comparatif A/B unifié (Elo & Condorcet)
+│   └── results_dashboard.py            # Dashboard Gradio unifié (mode standard + miniatures HTML)
 │
 ├── utils/                        # 🛠️ 4. Tri & Rangement de Fichiers
 │   ├── reorganize_images_csv.py        # Rangement via fichier CSV (Déplacement/Copie avec renommage unique)
@@ -76,7 +82,7 @@ Tous les scripts peuvent être exécutés directement via l'environnement virtue
 ### 1. Annoter manuellement votre base d'images
 Lancez l'interface d'annotation Gradio pour attribuer des notes à vos images :
 ```bash
-uv run python gui/gui_quality_annotator.py "chemin/vers/images"
+uv run python gui/quality_annotator.py "chemin/vers/images"
 ```
 
 ### 2. Entraîner un modèle de classification ViT
@@ -110,10 +116,10 @@ Vous disposez de plusieurs modèles complémentaires sous le dossier `aesthetic_
 Pour classer finement des variantes d'images en les comparant deux à deux (duels) via une interface interactive Gradio :
 ```bash
 # Mode Elo (par défaut)
-uv run python gui/gui_ab_vote.py --method elo
+uv run python gui/ab_vote.py --method elo
 
 # Mode Condorcet
-uv run python gui/gui_ab_vote.py --method condorcet
+uv run python gui/ab_vote.py --method condorcet
 ```
 
 
