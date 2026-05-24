@@ -1,0 +1,30 @@
+[project]
+name = "ai-image-utils"
+version = "0.1.0"
+description = "Outils d'Évaluation de Qualité Esthétique"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    # Dépendances NIMA (ex-Beauty)
+    "tensorflow>=2.20.0",
+    "pillow>=12.1.1",
+    "numpy>=2.4.2",
+    # Dépendances MUSIQ (ex-Esthetique)
+    "pyiqa>=0.1.8",
+    "torch>=2.2.0",
+    "torchvision>=0.17.0",
+    # Dépendances globales (ViT, VLM, GUI, Clustering)
+    "transformers>=4.40.0",
+    "datasets>=2.19.0",
+    "scikit-learn>=1.4.0",
+    "pandas>=2.2.0",
+    "gradio>=4.31.0",
+    "opencv-python>=4.9.0",
+    "imagehash>=4.3.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "langchain-ollama>=0.0.1",
+    "click>=8.1.0",
+    "loguru>=0.7.0",
+    "aesthetic-predictor>=0.1.2",
+]
