@@ -218,3 +218,6 @@ a_ranger
 *.csv
 *.jpeg
 *.jpg
+
+# OpenSpec
+.agent
